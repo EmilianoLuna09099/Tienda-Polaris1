@@ -21,9 +21,6 @@ public class CtrlProduct {
 		categorias.add(new Category(4,"Rompecabezas","RP"));
 		
 		return categorias;
-		/*for(Category c: categorias) {
-			System.out.println(c.toString());
-		}*/
 	}
 
 	
