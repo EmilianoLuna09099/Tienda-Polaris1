@@ -21,6 +21,10 @@ public class SvcCategoryImp implements SvcCategory{
 	@Autowired
 	RepoCategory repo;
 	
+	/*
+	 * Metodo para obtener todas las categorias
+	 * @param
+	 * */
 	@Override
 	public ResponseEntity< List<Category>> getCategories(){
 		try {
@@ -31,6 +35,10 @@ public class SvcCategoryImp implements SvcCategory{
 		}
 	}
 	
+	/*
+	 * Metodo para obtener las caategorias con status 1
+	 * @param
+	 * */
 	@Override
 	public ResponseEntity<List<Category>> getActiveCategory() {
 		try {
@@ -40,6 +48,11 @@ public class SvcCategoryImp implements SvcCategory{
 		}
 	}
 	
+	
+	/*
+	 * Metodo para insertar la categoria a la base de datos
+	 * @param category_id, id de la categoria a crear
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> createCategory(DtoCategoryIn in) {
 		try {
@@ -55,49 +68,65 @@ public class SvcCategoryImp implements SvcCategory{
 		}
 	}
 	
+	
+	/*
+	 * Endopoint put que actualiza una categoria
+	 * @param DtoCategoryIn in, la categoria a actualizar
+	 * @param Integer id, id de la categoria a actuaizar
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> updateCategory(DtoCategoryIn in, Integer id) {
 		try {
 			validarCategoryId(id);
 			repo.updateCategory(id, in.getCategory(), in.getTag());
-			return new ResponseEntity<>(new ApiResponse("La región ha sido actualizada"), HttpStatus.OK);
+			return new ResponseEntity<>(new ApiResponse("La categoria ha sido actualizada"), HttpStatus.OK);
 		}catch (DataAccessException e) {
 			if (e.getLocalizedMessage().contains("ux_region"))
-				throw new ApiException(HttpStatus.CONFLICT, "El nombre de la región ya está registrado");
+				throw new ApiException(HttpStatus.CONFLICT, "El nombre de la categoria ya está registrado");
 			if (e.getLocalizedMessage().contains("ux_tag"))
-				throw new ApiException(HttpStatus.CONFLICT, "El tag de la región ya está registrado");
+				throw new ApiException(HttpStatus.CONFLICT, "El tag de la categoria ya está registrado");
 
 			throw new DBAccessException(e);
 		}
 	}
 	
+	
 	private void validarCategoryId(Integer id) {
 		try {
 			if(repo.getCategory(id) == null) {
-				throw new ApiException(HttpStatus.NOT_FOUND, "El id de la región no existe");
+				throw new ApiException(HttpStatus.NOT_FOUND, "El id de la categoria no existe");
 			}
 		}catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}
 	}
 	
+	
+	/*
+	 * Metodo para habilitar la categoria de la base de datos
+	 * @param category_id, id de la categoria a habilitar
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> enableCategory(Integer id) {
 		try {
 			validarCategoryId(id);
 			repo.enableCategory(id);
-			return new ResponseEntity<>(new ApiResponse("La región ha sido activada"), HttpStatus.OK);
+			return new ResponseEntity<>(new ApiResponse("La categoria ha sido activada"), HttpStatus.OK);
 		}catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}
 	}
 	
+	/*
+	 * Metodo para deshabilitar la categoria de la base de datos
+	 * @param category_id, id de la categoria a deshabilitar
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> disableCategory(Integer id) {
 		try {
 			validarCategoryId(id);
 			repo.disableCategory(id);
-			return new ResponseEntity<>(new ApiResponse("La región ha sido activada"), HttpStatus.OK);
+			return new ResponseEntity<>(new ApiResponse("La categoria ha sido desactivada"), HttpStatus.OK);
 		}catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}
