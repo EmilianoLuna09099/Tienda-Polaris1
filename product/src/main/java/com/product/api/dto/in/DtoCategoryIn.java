@@ -12,7 +12,7 @@ public class DtoCategoryIn {
 	
 	
 	@JsonProperty("category")
-	@NotNull(message="La región es obligatoria")
+	@NotNull(message="La categoria es obligatoria")
 	private String category;
 		
 

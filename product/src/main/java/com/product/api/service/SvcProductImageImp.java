@@ -65,13 +65,13 @@ public class SvcProductImageImp implements SvcProductImage{
 				// Crear la entidad productImage y guardar la URL en la base de datos
 				productImage = new ProductImage();
 				productImage.setProduct_id(in.getProduct_id());
-				productImage.setImage("img/product/" + fileName);
+				productImage.setImage("/uploads/img/product/" + fileName);
 				productImage.setStatus(1); 
 
 				// Guardar la ruta de la imagen
 				repo.save(productImage);
 			}else {
-				productImage.setImage("img/customer/" + fileName);
+				productImage.setImage("/uploads/img/product/" + fileName);
 				repo.save(productImage);
 			}
 			

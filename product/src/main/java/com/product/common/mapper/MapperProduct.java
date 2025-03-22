@@ -3,10 +3,13 @@ package com.product.common.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.product.api.dto.in.DtoProductIn;
 import com.product.api.dto.out.DtoProductListOut;
 import com.product.api.entity.Product;
 
+@Service
 public class MapperProduct {
 	
 	public List<DtoProductListOut> fromProductList(List<Product> products){
