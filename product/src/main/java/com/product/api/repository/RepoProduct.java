@@ -12,7 +12,7 @@ import com.product.api.entity.Product;
 public interface RepoProduct extends JpaRepository<Product, Integer>{
 	
 	@Query(value = "SELECT p.product_id, p.gtin, p.product, p.description, p.price, p.stock, p.category_id, c.category, p.status "
-			+ "FROM product p "
+			+ "FROM product p  "
 			+ "INNER JOIN category c ON c.category_id = p.category_id "
 				+ "WHERE p.product_id = :product_id;", nativeQuery = true)
 			DtoProductOut getProduct(Integer product_id);

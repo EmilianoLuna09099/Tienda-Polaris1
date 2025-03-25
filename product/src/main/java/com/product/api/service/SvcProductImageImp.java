@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.product.api.dto.in.DtoProductImageIn;
+import com.product.api.entity.Product;
 import com.product.api.entity.ProductImage;
 import com.product.api.repository.RepoProductImage;
 import com.product.common.dto.ApiResponse;
@@ -60,7 +61,7 @@ public class SvcProductImageImp implements SvcProductImage{
 			
 			//Por checar ojo
 			ProductImage productImage = repo.findByProduct_id(in.getProduct_id());
-			if(productImage == null) {
+			
 
 				// Crear la entidad productImage y guardar la URL en la base de datos
 				productImage = new ProductImage();
@@ -70,10 +71,10 @@ public class SvcProductImageImp implements SvcProductImage{
 
 				// Guardar la ruta de la imagen
 				repo.save(productImage);
-			}else {
+			
 				productImage.setImage("/uploads/img/product/" + fileName);
 				repo.save(productImage);
-			}
+			
 			
 			return new ResponseEntity<>(new ApiResponse("La imagen ha sido actualizada"), HttpStatus.OK);
 		}catch (DataAccessException e) {
@@ -83,24 +84,34 @@ public class SvcProductImageImp implements SvcProductImage{
 		}
 	}
 
-	/*@Override
-	public ResponseEntity<ApiResponse> getProductImage() {
-		try {
-			repo.
-		}catch(DataAccessException e) {}
-	}
-	*/
 
 	@Override
 	public ResponseEntity<ApiResponse> deleteProductImage(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			validateProductId(id);
+			ProductImage productImage = repo.findById(id).get();
+			productImage.setStatus(0);
+			repo.save(productImage);
+			return new ResponseEntity<>(new ApiResponse("El producto ha sido activado"), HttpStatus.OK);
+		}catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
 	}
 
 	@Override
-	public ResponseEntity<ApiResponse> getProductImage() {
+	public ResponseEntity<ApiResponse> getProductImage(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private void validateProductId(Integer id) {
+		try {
+			if(repo.findById(id).isEmpty()) {
+				throw new ApiException(HttpStatus.NOT_FOUND, "El id del producto no existe");
+			}
+		}catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
 	}
 
 }

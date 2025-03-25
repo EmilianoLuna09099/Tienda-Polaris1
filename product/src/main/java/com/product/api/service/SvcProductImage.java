@@ -7,7 +7,7 @@ import com.product.common.dto.ApiResponse;
 
 public interface SvcProductImage {
 	
-	public ResponseEntity<ApiResponse> getProductImage();
+	public ResponseEntity<ApiResponse> getProductImage(Integer id);
 	public ResponseEntity<ApiResponse> uploadProductImage(DtoProductImageIn in);
 	public ResponseEntity<ApiResponse> deleteProductImage(Integer id);
 }
