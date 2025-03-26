@@ -99,7 +99,7 @@ public class SvcProductImageImp implements SvcProductImage{
 			ProductImage productImage = repo.findById(id).get();
 			productImage.setStatus(0);
 			repo.save(productImage);
-			return new ResponseEntity<>(new ApiResponse("El producto ha sido desactivado"), HttpStatus.OK);
+			return new ResponseEntity<>(new ApiResponse("la imagen ha sido desactivada"), HttpStatus.OK);
 		}catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}
@@ -116,7 +116,7 @@ public class SvcProductImageImp implements SvcProductImage{
 			ProductImage productImage = repo.findById(id).get();
 			productImage.setStatus(1);
 			repo.save(productImage);
-			return new ResponseEntity<>(new ApiResponse("El producto ha sido activado"), HttpStatus.OK);
+			return new ResponseEntity<>(new ApiResponse("la imagen ha sido activado"), HttpStatus.OK);
 		}catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}
