@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,11 @@ public class CtrlProductImage {
 	@Autowired
     SvcProductImage svc;
 	
+	
+	/*
+	 * Endopoint post que crea un prodcutoImagen
+	 * @param DtoCategoryIn in, el productoImagen a registrar
+	 * */
     @PostMapping
     public ResponseEntity<ApiResponse> createProductImage(@Valid @RequestBody DtoProductImageIn in, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
@@ -33,10 +39,22 @@ public class CtrlProductImage {
         return svc.uploadProductImage(in);
     }
     
+    /*
+	 * Endopoint match que actualiza el status a 0
+	 * @param Integer id, el prodcutoImagen a actualizar
+	 * */
     @DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> disableProduct(@PathVariable Integer id) {
 		return svc.deleteProductImage(id);
 	}
 	
+    /*
+	 * Endopoint match que actualiza el status a 1
+	 * @param Integer id, el prodcutoImagen a actualizar
+	 * */
+    @PatchMapping("/{id}")
+	public ResponseEntity<ApiResponse> enableProduct(@PathVariable Integer id) {
+		return svc.enableProductImage(id);
+	}
     
 }

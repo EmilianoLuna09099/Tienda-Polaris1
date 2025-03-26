@@ -10,4 +10,5 @@ public interface SvcProductImage {
 	public ResponseEntity<ApiResponse> getProductImage(Integer id);
 	public ResponseEntity<ApiResponse> uploadProductImage(DtoProductImageIn in);
 	public ResponseEntity<ApiResponse> deleteProductImage(Integer id);
+	public ResponseEntity<ApiResponse> enableProductImage(Integer id);
 }

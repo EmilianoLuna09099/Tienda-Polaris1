@@ -11,6 +11,10 @@ import com.product.api.entity.Product;
 @Repository
 public interface RepoProduct extends JpaRepository<Product, Integer>{
 	
+	/*
+	 * Metodo para obtener el producto deseado
+	 * @param product_id, el identificador del producto deseado
+	 * */
 	@Query(value = "SELECT p.product_id, p.gtin, p.product, p.description, p.price, p.stock, p.category_id, c.category, p.status "
 			+ "FROM product p  "
 			+ "INNER JOIN category c ON c.category_id = p.category_id "

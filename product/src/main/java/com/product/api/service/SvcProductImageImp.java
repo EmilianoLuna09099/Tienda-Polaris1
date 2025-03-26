@@ -31,6 +31,10 @@ public class SvcProductImageImp implements SvcProductImage{
 	@Value("${app.upload.dir}")
 	private String uploadDir;
 	
+	/*
+	 * Metodo para guardar la imagen en base 64 en la base de datos
+	 * @param in, el cuerpo JSON con la imagen y el id
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> uploadProductImage(DtoProductImageIn in) {
 		
@@ -51,7 +55,7 @@ public class SvcProductImageImp implements SvcProductImage{
 			String fileName = UUID.randomUUID().toString() + ".png";
 
 			// Construye la ruta completa donde se guardará la imagen
-			Path imagePath = Paths.get(uploadDir, "img", "customer", fileName);
+			Path imagePath = Paths.get(uploadDir, "img", "product", fileName);
 		    
 			// Asegurarse de que el directorio exista
 			Files.createDirectories(imagePath.getParent());
@@ -84,7 +88,10 @@ public class SvcProductImageImp implements SvcProductImage{
 		}
 	}
 
-
+	/*
+	 * Metodo para desactivar una imagen
+	 * @param product_id, el identificador de la imagen del producto
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> deleteProductImage(Integer id) {
 		try {
@@ -92,12 +99,34 @@ public class SvcProductImageImp implements SvcProductImage{
 			ProductImage productImage = repo.findById(id).get();
 			productImage.setStatus(0);
 			repo.save(productImage);
+			return new ResponseEntity<>(new ApiResponse("El producto ha sido desactivado"), HttpStatus.OK);
+		}catch (DataAccessException e) {
+			throw new DBAccessException(e);
+		}
+	}
+	
+	/*
+	 * Metodo para activar una imagen
+	 * @param product_id, el identificador de la imagen del producto
+	 * */
+	@Override
+	public ResponseEntity<ApiResponse> enableProductImage(Integer id) {
+		try {
+			validateProductId(id);
+			ProductImage productImage = repo.findById(id).get();
+			productImage.setStatus(1);
+			repo.save(productImage);
 			return new ResponseEntity<>(new ApiResponse("El producto ha sido activado"), HttpStatus.OK);
 		}catch (DataAccessException e) {
 			throw new DBAccessException(e);
 		}
 	}
-
+	
+	
+	/*
+	 * Metodo para obtener una imagen
+	 * @param product_id, el identificador de la imagen del producto
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> getProductImage(Integer id) {
 		// TODO Auto-generated method stub

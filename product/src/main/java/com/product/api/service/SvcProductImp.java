@@ -44,7 +44,11 @@ public class SvcProductImp implements SvcProduct {
 	
 	@Value("${app.upload.dir}")
 	private String uploadDir;
-
+	
+	/*
+	 * Metodo para obtener todos los productos
+	 * @param 
+	 * */
 	@Override
 	public ResponseEntity<List<DtoProductListOut>> getProducts() {
 		try {
@@ -55,6 +59,10 @@ public class SvcProductImp implements SvcProduct {
 		}
 	}
 
+	/*
+	 * Metodo para obtener un producto
+	 * @param id, el identificador del producto
+	 * */
 	@Override
 	public ResponseEntity<DtoProductOut> getProduct(Integer id) {
 		try {
@@ -69,21 +77,25 @@ public class SvcProductImp implements SvcProduct {
 			List<ProductImage> l= getAllProducts(id);
 			
 			 if (l == null || l.isEmpty()) {
-		            System.out.println("⚠️ No se encontraron imágenes en la base de datos para el producto ID: " + id);
-		            product.setImage(new ArrayList<>()); // Asegurar que la lista no sea null
+		            System.out.println("No se encontraron imágenes en la base de datos para el producto ID: " + id);
+		            product.setImage(new ArrayList<>()); 
 		            return new ResponseEntity<>(product, HttpStatus.OK);
 		        }
 			List<String> imagenes= new ArrayList<>();
 			
 			
 			for (ProductImage pi : l) {
-				String image = readProductImageFile(pi);
-				if (image != null && !image.isBlank()) {
-	                imagenes.add(image);
-	            } else {
-	                System.out.println("⚠️ Imagen vacía para ProductImage: " + pi.getImage());
-	            }
-				//imagenes.add(image);
+				if(pi.getStatus()!=0) {
+					String image = readProductImageFile(pi);
+					if (image != null && !image.isBlank()) {
+		                imagenes.add(image);
+		            } else {
+		                System.out.println("No hay imagen : " + pi.getImage());
+		            }
+					//imagenes.add(image);
+					
+				}
+				
 			}
 			
 			
@@ -96,7 +108,11 @@ public class SvcProductImp implements SvcProduct {
 			throw new DBAccessException(e);
 		}
 	}
-
+	
+	/*
+	 * Metodo para crear un producto
+	 * @param in, el JSON del producto
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> createProduct(DtoProductIn in) {
 		try {
@@ -114,7 +130,13 @@ public class SvcProductImp implements SvcProduct {
 			throw new DBAccessException(e);
 		}
 	}
-
+	
+	
+	/*
+	 * Metodo para actualizar un producto
+	 * @param id, el identificador del producto
+	 * @Param in, los nuevos valores en JSON
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> updateProduct(Integer id, DtoProductIn in) {
 		try {
@@ -133,7 +155,12 @@ public class SvcProductImp implements SvcProduct {
 			throw new DBAccessException(e);
 		}
 	}
-
+	
+	
+	/*
+	 * Metodo para habilitar un producto
+	 * @param id, el identificador del producto
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> enableProduct(Integer id) {
 		try {
@@ -146,7 +173,11 @@ public class SvcProductImp implements SvcProduct {
 			throw new DBAccessException(e);
 		}
 	}
-
+	
+	/*
+	 * Metodo para deshabilitar un producto
+	 * @param id, el identificador del producto
+	 * */
 	@Override
 	public ResponseEntity<ApiResponse> disableProduct(Integer id) {
 		try {
@@ -170,26 +201,32 @@ public class SvcProductImp implements SvcProduct {
 		}
 	}
 	
+	/*
+	 * Metodo para devolver un producto a base 64
+	 * @param id, el identificador del producto
+	 * */
 	private String readProductImageFile(ProductImage productImage) {
-	    try {
+		try {
 	        String imageUrl = productImage.getImage();
 	        if (imageUrl == null || imageUrl.isBlank()) return "";
 
-	        // Eliminar barra inicial
+	        // Remover barra inicial
 	        if (imageUrl.startsWith("/")) imageUrl = imageUrl.substring(1);
 
-	        // Usar File directamente
+	        // Evitar que "uploads" se duplique
+	        if (imageUrl.startsWith("uploads/")) {
+	            imageUrl = imageUrl.substring("uploads/".length());
+	        }
+
+	        // Construir ruta correcta
 	        File imageFile = new File(uploadDir, imageUrl);
-	        
-	        System.out.println("🔍 Ruta absoluta File: " + imageFile.getAbsolutePath());
-	        System.out.println("¿Existe? " + imageFile.exists());
-	        
+
 	        if (!imageFile.exists()) return "";
-	        
+
 	        // Leer usando FileInputStream
 	        byte[] imageBytes = Files.readAllBytes(imageFile.toPath());
 	        return Base64.getEncoder().encodeToString(imageBytes);
-	        
+
 	    } catch (Exception e) {
 	        System.err.println("Error leyendo imagen: " + e.getMessage());
 	        return "";
