@@ -22,6 +22,8 @@ import com.product.api.service.SvcProduct;
 import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 
@@ -30,6 +32,7 @@ import jakarta.validation.Valid;
  * */
 @RestController
 @RequestMapping("/product")
+@Tag(name = "Product", description = "Administración de productos")
 public class CtrlProduct {
 	
 	@Autowired
@@ -39,6 +42,7 @@ public class CtrlProduct {
 	 * Endopoint get que devuelve todos las productos registrados
 	 * @param 
 	 * */
+	@Operation(summary = "Consultar Productos", description = "Retorna todos los productos registrados en el sistema")
 	@GetMapping
 	public ResponseEntity<List<DtoProductListOut>> getProducts() {
 		return svc.getProducts();
@@ -48,6 +52,7 @@ public class CtrlProduct {
 	 * Endopoint get que devuelve una categoria especifica
 	 * @param id, el ide del prodcuto que se requiere
 	 * */
+	@Operation(summary = "Consultar la productos", description = "Retorna el producto dependiendo su id")
 	@GetMapping("/{id}")
 	public ResponseEntity<DtoProductOut> getProduct(@PathVariable Integer id) {
 		return svc.getProduct(id);
@@ -57,6 +62,7 @@ public class CtrlProduct {
 	 * Endopoint post que crea un prodcuto
 	 * @param DtoCategoryIn in, el producto a registrar
 	 * */
+	@Operation(summary = "Crear productos", description = "Registra un nuevo producto")
 	@PostMapping
 	public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody DtoProductIn in, BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
@@ -71,6 +77,7 @@ public class CtrlProduct {
 	 * @param DtoCategoryIn in, el producto a actualizar
 	 * @param Integer id, id de el producto a actuaizar
 	 * */
+	@Operation(summary = "Actualizar productos", description = "Actualiza el producto en el sistema")
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> updateProduct(@PathVariable Integer id, @Valid @RequestBody DtoProductIn in,
 			BindingResult bindingResult) {
@@ -85,6 +92,7 @@ public class CtrlProduct {
 	 * Endopoint match que actualiza el status a 1
 	 * @param Integer id, el prodcuto a actualizar
 	 * */
+	@Operation(summary = "Habilitar productos", description = "Cambia el producto a status 1 en el sistema")
 	@PatchMapping("/{id}/enable")
 	public ResponseEntity<ApiResponse> enableProduct(@PathVariable Integer id) {
 		return svc.enableProduct(id);
@@ -94,6 +102,7 @@ public class CtrlProduct {
 	 * Endopoint match que actualiza el status a 0
 	 * @param Integer id, el producto a actualizar
 	 * */
+	@Operation(summary = "Deshabilitar productos", description = "Cambia el producto a status 0 en el sistema")
 	@PatchMapping("/{id}/disable")
 	public ResponseEntity<ApiResponse> disableProduct(@PathVariable Integer id) {
 		return svc.disableProduct(id);

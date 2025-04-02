@@ -17,10 +17,13 @@ import com.product.api.service.SvcProductImage;
 import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/product-image")
+@Tag(name = "Imagenes", description = "Administración de imagenes")
 public class CtrlProductImage {
 	
 	@Autowired
@@ -31,6 +34,7 @@ public class CtrlProductImage {
 	 * Endopoint post que crea un prodcutoImagen
 	 * @param DtoCategoryIn in, el productoImagen a registrar
 	 * */
+	@Operation(summary = "Crear Imagenes-productos", description = "Registra una nueva imagen")
     @PostMapping
     public ResponseEntity<ApiResponse> createProductImage(@Valid @RequestBody DtoProductImageIn in, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
@@ -43,6 +47,8 @@ public class CtrlProductImage {
 	 * Endopoint match que actualiza el status a 0
 	 * @param Integer id, el prodcutoImagen a actualizar
 	 * */
+	@Operation(summary = "Borrar Imagenes-productos", description = "Elimina una imagen")
+
     @DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> disableProduct(@PathVariable Integer id) {
 		return svc.deleteProductImage(id);
@@ -52,6 +58,7 @@ public class CtrlProductImage {
 	 * Endopoint match que actualiza el status a 1
 	 * @param Integer id, el prodcutoImagen a actualizar
 	 * */
+	@Operation(summary = "Habilitar Imagenes-productos", description = "Regresa una imagen a status 1")
     @PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse> enableProduct(@PathVariable Integer id) {
 		return svc.enableProductImage(id);
