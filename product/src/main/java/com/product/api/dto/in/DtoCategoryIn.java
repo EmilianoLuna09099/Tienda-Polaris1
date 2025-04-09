@@ -1,4 +1,4 @@
-package com.product.api.dto;
+package com.product.api.dto.in;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ public class DtoCategoryIn {
 	
 	
 	@JsonProperty("category")
-	@NotNull(message="La región es obligatoria")
+	@NotNull(message="La categoria es obligatoria")
 	private String category;
 		
 
