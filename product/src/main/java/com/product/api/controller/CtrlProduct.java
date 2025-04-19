@@ -1,6 +1,5 @@
 package com.product.api.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,88 +15,88 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.product.api.dto.DtoCategoryIn;
-import com.product.api.entity.Category;
-import com.product.api.service.SvcCategory;
-import com.product.common.ApiResponse;
+import com.product.api.dto.in.DtoProductIn;
+import com.product.api.dto.out.DtoProductListOut;
+import com.product.api.dto.out.DtoProductOut;
+import com.product.api.service.SvcProduct;
+import com.product.common.dto.ApiResponse;
 import com.product.exception.ApiException;
 
 import jakarta.validation.Valid;
 
-@RestController
-@RequestMapping("/category")
 
 /**
  * Clase que define endpoints
  * */
+@RestController
+@RequestMapping("/product")
 public class CtrlProduct {
 	
 	@Autowired
-	SvcCategory svc;
+	SvcProduct svc;
 	
 	/*
-	 * Endopoint get que devuelve todas las categorias registradas
+	 * Endopoint get que devuelve todos las productos registrados
 	 * @param 
 	 * */
 	@GetMapping
-	public ResponseEntity< List<Category>> getCategorias() {
-		return svc.getCategories();
+	public ResponseEntity<List<DtoProductListOut>> getProducts() {
+		return svc.getProducts();
 	}
 	
 	/*
-	 * Endopoint get que devuelve todas las categorias con staturs 1
-	 * @param 
+	 * Endopoint get que devuelve una categoria especifica
+	 * @param id, el ide del prodcuto que se requiere
 	 * */
-	@GetMapping("/active")
-	public ResponseEntity<List<Category>> getActiveCategories(){
-		return svc.getActiveCategory();
+	@GetMapping("/{id}")
+	public ResponseEntity<DtoProductOut> getProduct(@PathVariable Integer id) {
+		return svc.getProduct(id);
 	}
 	
 	/*
-	 * Endopoint post que crea una categoria
-	 * @param DtoCategoryIn in, la categoria a registrar
+	 * Endopoint post que crea un prodcuto
+	 * @param DtoCategoryIn in, el producto a registrar
 	 * */
-	@PostMapping()
-	public ResponseEntity<ApiResponse> createCategory(@Valid @RequestBody DtoCategoryIn in, BindingResult bindingResult ){
+	@PostMapping
+	public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody DtoProductIn in, BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
-		
-		return svc.createCategory(in);
-	}
 
+		return svc.createProduct(in);
+	}
+	
 	
 	/*
-	 * Endopoint put que actualiza una categoria
-	 * @param DtoCategoryIn in, la categoria a actualizar
-	 * @param Integer id, id de la categoria a actuaizar
+	 * Endopoint put que actualiza un producto
+	 * @param DtoCategoryIn in, el producto a actualizar
+	 * @param Integer id, id de el producto a actuaizar
 	 * */
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse> updateCategory(@PathVariable("id") Integer id,@Valid @RequestBody DtoCategoryIn in, BindingResult bindingResult){
-		if(bindingResult.hasErrors())
-			throw new ApiException(HttpStatus.BAD_REQUEST,bindingResult.getAllErrors().get(0).getDefaultMessage());
+	public ResponseEntity<ApiResponse> updateProduct(@PathVariable Integer id, @Valid @RequestBody DtoProductIn in,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors())
+			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
 
-		return svc.updateCategory(in,id);
+		return svc.updateProduct(id, in);
 	}
 	
 	
 	/*
 	 * Endopoint match que actualiza el status a 1
-	 * @param Integer id, la categoria a actualizar
+	 * @param Integer id, el prodcuto a actualizar
 	 * */
 	@PatchMapping("/{id}/enable")
-	public ResponseEntity<ApiResponse> enableCategory(@PathVariable Integer id){
-		return svc.enableCategory(id);
+	public ResponseEntity<ApiResponse> enableProduct(@PathVariable Integer id) {
+		return svc.enableProduct(id);
 	}
-	
 	
 	/*
 	 * Endopoint match que actualiza el status a 0
-	 * @param Integer id, la categoria a actualizar
+	 * @param Integer id, el producto a actualizar
 	 * */
 	@PatchMapping("/{id}/disable")
-	public ResponseEntity<ApiResponse> disableCategory(@PathVariable Integer id){
-		return svc.disableCategory(id);
+	public ResponseEntity<ApiResponse> disableProduct(@PathVariable Integer id) {
+		return svc.disableProduct(id);
 	}
-	
 	
 }

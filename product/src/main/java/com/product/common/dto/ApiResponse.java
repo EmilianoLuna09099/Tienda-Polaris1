@@ -1,4 +1,4 @@
-package com.product.common;
+package com.product.common.dto;
 
 /**
  * Clase que manda los mensajes http
